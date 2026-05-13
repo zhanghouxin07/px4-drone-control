@@ -89,13 +89,24 @@ async def run_mission():
     drone = await connect_drone()
     await wait_for_gps(drone)
 
-    # === 设置参数：允许无 RC 解锁（SITL 仿真必备） ===
-    logger.info("⚙️ 设置 COM_RCL_EXCEPT=4（允许无 RC 解锁）...")
+    # === 设置 SITL 仿真参数 ===
+    logger.info("⚙️ 设置 SITL 仿真参数...")
+
+    # 1. 允许无 RC 解锁
     try:
         await drone.param.set_param_int("COM_RCL_EXCEPT", 4)
-        logger.info("✓ 参数设置完成")
+        logger.info("  ✓ COM_RCL_EXCEPT=4（允许无 RC 解锁）")
     except ParamError as e:
-        logger.warning(f"参数设置失败（可能已设置）: {e}")
+        logger.warning(f"  COM_RCL_EXCEPT 设置失败: {e}")
+
+    # 2. 跳过安全开关（IO 安全开关）
+    try:
+        await drone.param.set_param_int("CBRK_IO_SAFETY", 22027)
+        logger.info("  ✓ CBRK_IO_SAFETY=22027（跳过安全开关）")
+    except ParamError as e:
+        logger.warning(f"  CBRK_IO_SAFETY 设置失败: {e}")
+
+    await asyncio.sleep(1)  # 等待参数生效
 
     # === 起飞 ===
     logger.info("🚁 解锁 (Arm)...")

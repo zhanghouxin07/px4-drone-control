@@ -282,13 +282,19 @@ async def main():
     drone = await connect_drone()
     await update_telemetry(drone)
 
-    # 设置参数：允许无 RC 解锁
-    logger.info("⚙️ 设置 COM_RCL_EXCEPT=4（允许无 RC 解锁）...")
+    # === 设置 SITL 仿真参数 ===
+    logger.info("⚙️ 设置 SITL 仿真参数...")
     try:
         await drone.param.set_param_int("COM_RCL_EXCEPT", 4)
-        logger.info("✓ 参数设置完成")
+        logger.info("  ✓ COM_RCL_EXCEPT=4（允许无 RC 解锁）")
     except ParamError as e:
-        logger.warning(f"参数设置失败（可能已设置）: {e}")
+        logger.warning(f"  COM_RCL_EXCEPT 设置失败: {e}")
+    try:
+        await drone.param.set_param_int("CBRK_IO_SAFETY", 22027)
+        logger.info("  ✓ CBRK_IO_SAFETY=22027（跳过安全开关）")
+    except ParamError as e:
+        logger.warning(f"  CBRK_IO_SAFETY 设置失败: {e}")
+    await asyncio.sleep(1)
 
     # 启动键盘监听线程
     listener_thread = threading.Thread(target=keyboard_listener, daemon=True)
