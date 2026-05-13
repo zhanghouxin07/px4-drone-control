@@ -16,6 +16,7 @@ import logging
 
 from mavsdk import System
 from mavsdk.action import ActionError
+from mavsdk.param import ParamError
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -87,6 +88,14 @@ async def run_mission():
     """执行飞行任务"""
     drone = await connect_drone()
     await wait_for_gps(drone)
+
+    # === 设置参数：允许无 RC 解锁（SITL 仿真必备） ===
+    logger.info("⚙️ 设置 COM_RCL_EXCEPT=4（允许无 RC 解锁）...")
+    try:
+        await drone.param.set_param_int("COM_RCL_EXCEPT", 4)
+        logger.info("✓ 参数设置完成")
+    except ParamError as e:
+        logger.warning(f"参数设置失败（可能已设置）: {e}")
 
     # === 起飞 ===
     logger.info("🚁 解锁 (Arm)...")
