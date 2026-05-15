@@ -282,18 +282,21 @@ async def main():
     drone = await connect_drone()
     await update_telemetry(drone)
 
-    # === 设置 SITL 仿真参数 ===
+    # === SITL 仿真：跳过所有预解锁检查 ===
     logger.info("⚙️ 设置 SITL 仿真参数...")
-    try:
-        await drone.param.set_param_int("COM_RCL_EXCEPT", 4)
-        logger.info("  ✓ COM_RCL_EXCEPT=4（允许无 RC 解锁）")
-    except ParamError as e:
-        logger.warning(f"  COM_RCL_EXCEPT 设置失败: {e}")
-    try:
-        await drone.param.set_param_int("CBRK_IO_SAFETY", 22027)
-        logger.info("  ✓ CBRK_IO_SAFETY=22027（跳过安全开关）")
-    except ParamError as e:
-        logger.warning(f"  CBRK_IO_SAFETY 设置失败: {e}")
+    params = {
+        "COM_RCL_EXCEPT":   (4,      "允许无 RC 解锁"),
+        "CBRK_IO_SAFETY":   (22027,  "跳过 IO 安全开关"),
+        "CBRK_SUPPLY_CHK":  (22027,  "跳过供电/电池检查"),
+        "CAL_GYRO0_ID":     (1310988,"陀螺仪校准 ID"),
+        "CAL_ACC0_ID":      (1310988,"加速度计校准 ID"),
+    }
+    for name, (val, desc) in params.items():
+        try:
+            await drone.param.set_param_int(name, val)
+            logger.info(f"  ✓ {name}={val}（{desc}）")
+        except ParamError as e:
+            logger.warning(f"  {name} 设置失败: {e}")
     await asyncio.sleep(1)
 
     # 启动键盘监听线程
