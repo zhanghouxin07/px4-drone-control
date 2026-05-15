@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.9">
+  <world name="scene">
+    <physics type="ode">
+      <max_step_size>0.004</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>250</real_time_update_rate>
+    </physics>
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type="adiabatic"/>
+
+    <!-- Scene: sky + ambient -->
+    <scene>
+      <grid>false</grid>
+      <ambient>0.45 0.45 0.5 1</ambient>
+      <background>0.6 0.7 0.9 1</background>
+      <shadows>true</shadows>
+    </scene>
+
+    <!-- ====== GROUND ====== -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>1 1</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction><ode/></friction>
+            <bounce/><contact/>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>500 500</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.35 0.45 0.25 1</ambient>
+            <diffuse>0.4 0.55 0.3 1</diffuse>
+            <specular>0.05 0.05 0.05 1</specular>
+          </material>
+        </visual>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx><ixy>0</ixy><ixz>0</ixz>
+            <iyy>1</iyy><iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>0 0 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <!-- ====== SUN ====== -->
+    <light name="sunUTC" type="directional">
+      <pose>0 0 500 0 -0 0</pose>
+      <cast_shadows>true</cast_shadows>
+      <intensity>1.2</intensity>
+      <direction>0.001 0.625 -0.78</direction>
+      <diffuse>0.95 0.95 0.92 1</diffuse>
+      <specular>0.3 0.3 0.3 1</specular>
+      <attenuation>
+        <range>2000</range>
+        <linear>0</linear>
+        <constant>1</constant>
+        <quadratic>0</quadratic>
+      </attenuation>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
+    </light>
+
+    <!-- ====== BUILDINGS (box primitives) ====== -->
+
+    <!-- Building 1: large office (north-east) -->
+    <model name="building_01">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>30 20 15</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>30 20 15</size></box></geometry>
+          <material>
+            <ambient>0.5 0.55 0.6 1</ambient>
+            <diffuse>0.55 0.6 0.65 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+          </material>
+        </visual>
+        <pose>0 0 7.5 0 -0 0</pose>
+      </link>
+      <pose>80 120 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <!-- Building 2: tall tower (east) -->
+    <model name="building_02">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>8 8 40</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>8 8 40</size></box></geometry>
+          <material>
+            <ambient>0.35 0.38 0.45 1</ambient>
+            <diffuse>0.4 0.43 0.5 1</diffuse>
+            <specular>0.15 0.15 0.15 1</specular>
+          </material>
+        </visual>
+        <pose>0 0 20 0 -0 0</pose>
+      </link>
+      <pose>-60 80 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <!-- Building 3: small square (south) -->
+    <model name="building_03">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>15 15 8</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>15 15 8</size></box></geometry>
+          <material>
+            <ambient>0.55 0.45 0.35 1</ambient>
+            <diffuse>0.6 0.5 0.4 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 4 0 -0 0</pose>
+      </link>
+      <pose>-100 -60 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <!-- Building 4: wide low building (north-west) -->
+    <model name="building_04">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>40 15 5</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>40 15 5</size></box></geometry>
+          <material>
+            <ambient>0.7 0.7 0.7 1</ambient>
+            <diffuse>0.75 0.75 0.75 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 2.5 0 -0 0</pose>
+      </link>
+      <pose>30 -100 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <!-- Building 5: medium office (far east) -->
+    <model name="building_05">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>20 12 12</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>20 12 12</size></box></geometry>
+          <material>
+            <ambient>0.4 0.5 0.55 1</ambient>
+            <diffuse>0.45 0.55 0.6 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 6 0 -0 0</pose>
+      </link>
+      <pose>140 30 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <!-- Building 6: highrise (south-east) -->
+    <model name="building_06">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>10 10 30</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>10 10 30</size></box></geometry>
+          <material>
+            <ambient>0.25 0.3 0.4 1</ambient>
+            <diffuse>0.3 0.35 0.45 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+          </material>
+        </visual>
+        <pose>0 0 15 0 -0 0</pose>
+      </link>
+      <pose>120 -90 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <!-- ====== TREES ====== -->
+
+    <!-- Tree macro: trunk + foliage -->
+    <model name="tree_01">
+      <static>true</static>
+      <!-- trunk -->
+      <link name="trunk">
+        <collision name="col">
+          <geometry><box><size>0.5 0.5 2</size></box></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><box><size>0.5 0.5 2</size></box></geometry>
+          <material>
+            <ambient>0.35 0.2 0.1 1</ambient>
+            <diffuse>0.4 0.25 0.12 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 1 0 -0 0</pose>
+      </link>
+      <!-- foliage -->
+      <link name="foliage">
+        <collision name="col">
+          <geometry><sphere><radius>2.0</radius></sphere></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><sphere><radius>2.0</radius></sphere></geometry>
+          <material>
+            <ambient>0.15 0.45 0.15 1</ambient>
+            <diffuse>0.2 0.55 0.2 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 3.5 0 -0 0</pose>
+      </link>
+      <pose>20 15 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name="tree_02">
+      <static>true</static>
+      <link name="trunk">
+        <collision name="col">
+          <geometry><box><size>0.4 0.4 1.5</size></box></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><box><size>0.4 0.4 1.5</size></box></geometry>
+          <material>
+            <ambient>0.35 0.2 0.1 1</ambient>
+            <diffuse>0.4 0.25 0.12 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 0.75 0 -0 0</pose>
+      </link>
+      <link name="foliage">
+        <collision name="col">
+          <geometry><sphere><radius>1.8</radius></sphere></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><sphere><radius>1.8</radius></sphere></geometry>
+          <material>
+            <ambient>0.1 0.4 0.1 1</ambient>
+            <diffuse>0.15 0.5 0.15 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 3 0 -0 0</pose>
+      </link>
+      <pose>25 -15 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name="tree_03">
+      <static>true</static>
+      <link name="trunk">
+        <collision name="col">
+          <geometry><box><size>0.5 0.5 2</size></box></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><box><size>0.5 0.5 2</size></box></geometry>
+          <material>
+            <ambient>0.35 0.2 0.1 1</ambient>
+            <diffuse>0.4 0.25 0.12 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 1 0 -0 0</pose>
+      </link>
+      <link name="foliage">
+        <collision name="col">
+          <geometry><sphere><radius>2.0</radius></sphere></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><sphere><radius>2.0</radius></sphere></geometry>
+          <material>
+            <ambient>0.12 0.5 0.12 1</ambient>
+            <diffuse>0.18 0.6 0.18 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 3.5 0 -0 0</pose>
+      </link>
+      <pose>-15 20 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name="tree_04">
+      <static>true</static>
+      <link name="trunk">
+        <collision name="col">
+          <geometry><box><size>0.4 0.4 1.5</size></box></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><box><size>0.4 0.4 1.5</size></box></geometry>
+          <material>
+            <ambient>0.35 0.2 0.1 1</ambient>
+            <diffuse>0.4 0.25 0.12 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 0.75 0 -0 0</pose>
+      </link>
+      <link name="foliage">
+        <collision name="col">
+          <geometry><sphere><radius>1.5</radius></sphere></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><sphere><radius>1.5</radius></sphere></geometry>
+          <material>
+            <ambient>0.15 0.35 0.1 1</ambient>
+            <diffuse>0.2 0.45 0.12 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 2.5 0 -0 0</pose>
+      </link>
+      <pose>-20 -18 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <model name="tree_05">
+      <static>true</static>
+      <link name="trunk">
+        <collision name="col">
+          <geometry><box><size>0.4 0.4 1.5</size></box></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><box><size>0.4 0.4 1.5</size></box></geometry>
+          <material>
+            <ambient>0.35 0.2 0.1 1</ambient>
+            <diffuse>0.4 0.25 0.12 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 0.75 0 -0 0</pose>
+      </link>
+      <link name="foliage">
+        <collision name="col">
+          <geometry><sphere><radius>1.8</radius></sphere></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><sphere><radius>1.8</radius></sphere></geometry>
+          <material>
+            <ambient>0.1 0.5 0.1 1</ambient>
+            <diffuse>0.15 0.6 0.15 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 3 0 -0 0</pose>
+      </link>
+      <pose>35 25 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+
+    <!-- ====== ROAD MARKERS (visual only) ====== -->
+    <model name="road_marker_1">
+      <static>true</static>
+      <link name="link">
+        <visual name="vis">
+          <geometry><box><size>40 0.3 0.02</size></box></geometry>
+          <material>
+            <ambient>0.6 0.6 0.6 1</ambient>
+            <diffuse>0.65 0.65 0.65 1</diffuse>
+          </material>
+        </visual>
+        <pose>0 0 0.01 0 -0 0</pose>
+      </link>
+      <pose>0 50 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <world_frame_orientation>ENU</world_frame_orientation>
+      <latitude_deg>47.397971057728974</latitude_deg>
+      <longitude_deg>8.546163739800146</longitude_deg>
+      <elevation>0</elevation>
+    </spherical_coordinates>
+  </world>
+</sdf>
